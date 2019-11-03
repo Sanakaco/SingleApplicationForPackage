@@ -5,6 +5,7 @@ import com.kin.singleDemo.entity.User;
 import com.kin.singleDemo.service.impl.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 /**
  * @author pandas
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
  * @Description TODO
  * @create 2019/10/31 11:23
  */
+@Service
 public class UserDaoImpl implements UserDao {
 
     private User user=null;
@@ -26,7 +28,6 @@ public class UserDaoImpl implements UserDao {
                 user.setUsername("管理员");
             }
         }
-
         return user;
     }
 }
