@@ -1,15 +1,16 @@
 package com.kin.singleDemo.controller;
 
 import com.kin.singleDemo.entity.User;
-import com.kin.singleDemo.service.impl.UserServiceImpl;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import com.kin.singleDemo.service.UserService;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
 
 /**
  * @author pandas
@@ -17,29 +18,37 @@ import java.io.IOException;
  * @Description TODO
  * @create 2019/10/31 15:18
  */
-public class LoginController extends HttpServlet {
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+@Controller
+public class LoginController {
+    @Autowired
+    private UserService userService;
 
-
+    @RequestMapping(value = {"","/login"},method = RequestMethod.GET)
+    public String login(){
+        System.out.println("asfas");
+        return "login";
     }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String hEmail=req.getParameter("email");
-        String hPassword=req.getParameter("password");
-        UserServiceImpl userService=new UserServiceImpl();
-        User user=userService.login(hEmail,hPassword);
+    @RequestMapping(value = "/login",method = RequestMethod.POST)
+    public String login(@RequestParam String email,@RequestParam String password){
+        User user=userService.login(email,password);
+        System.out.println("asdf");
         //如果非空，说明验证通过
         if (user!=null){
-            resp.sendRedirect("/main.jsp");
+            //通过关键字跳转页面
+            return "redirect:/main";
         }
         //登录失败
         else {
-            req.setAttribute("message","用户或密码错误");
-            req.getRequestDispatcher("/index.jsp").forward(req,resp);
+            return login();
         }
-
-
     }
+    @RequestMapping("/test")
+    public ModelAndView test(){
+        ModelAndView view = new ModelAndView();
+        view.setViewName("test");
+        view.addObject("msg","word");
+        System.out.println("wo");
+        return view;
+    }
+
 }
